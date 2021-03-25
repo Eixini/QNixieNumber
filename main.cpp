@@ -10,8 +10,6 @@ int main(int argc, char *argv[])
     window.setWindowTitle("Nixie Numbers");
     window.setFixedSize(200,100);
 
-    window.callTest();
-
     window.show();
     return app.exec();
 }
