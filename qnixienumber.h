@@ -10,6 +10,7 @@
 
 #include <array>
 #include <QDebug>
+#include <QString>
 
 class QNixieNumber : public QWidget
 {
@@ -21,15 +22,11 @@ public:
     QNixieNumber(QWidget *parent = nullptr);
     ~QNixieNumber();
 
-
 public slots:
 
 int intValue() const; // Returns the current integer value
 void display(int num); // Display nixie numbers
 void setSegment(int val); // Sets the number of segments
-
-void callTest(); // FOR DEBUGING!!!!!!
-
 
 private:
 
@@ -53,7 +50,6 @@ std::array<QPixmap,10> NixieNumber
 
     // For Debuging
     QLabel displayNum;
-    QLabel displayNum2;
     QTimer timer;
     QTime time;
 
