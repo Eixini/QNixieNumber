@@ -11,6 +11,9 @@
 #include <array>
 #include <QDebug>
 #include <QString>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QRect>
 
 class QNixieNumber : public QWidget
 {
@@ -55,9 +58,15 @@ std::array<QPixmap,10> NixieNumber
 
     std::array<QPixmap,2> number;
 
+    int width_;
+    int height_;
+
 private slots:
 
 void test(); // for debuging
+void testSegment(); // for debuging
+
+void paintEvent(QPaintEvent *paintevent) override; // Переопределенный метод
 
 };
 #endif // QNIXIENUMBER_H
