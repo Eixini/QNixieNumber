@@ -7,57 +7,81 @@ QNixieNumber::QNixieNumber(QWidget *parent) : QWidget(parent)
     width_ = NixieNumber[0].width();
     height_ = NixieNumber[0].height();
 
-    //timer.start(1000);
-    //connect(&timer, &QTimer::timeout ,this, &QNixieNumber::testSegment); // for debuging
+    display(523009);
+
+    timer.start(1000);
+    connect(&timer, &QTimer::timeout,this,QOverload<>::of(&QNixieNumber::update));
 
 }
 
-int QNixieNumber::intValue() const {}
-
-void QNixieNumber::display(int num){}
-
-void QNixieNumber::setSegment(int val){}
-
-void QNixieNumber::test()
+int QNixieNumber::intValue() const
 {
+    return value_;
+}
 
-    time = time.addSecs(1);
-    // Splitting value
-    int s1 = time.second() % 10;
-    displayNum.setPixmap(NixieNumber[s1]); // test
+void QNixieNumber::display(int num)
+{
+    number_ = num;
+
+    if(QNixieNumber::CHANGED)
+    {
+
+
+    }
+    else if(QNixieNumber::FIXED)
+    {
+
+        dig_ = digits(number_); // Получение количество знаков в цифре
+
+        for(int i = dig_; 0 < i; --i)
+        {
+              number[i-1] = split(number_);
+        }
+
+        // Теперь необходимо создатьвать сегменты и инициализировать их значениями
+
+    }
+    else
+    {
+        QMessageBox::warning(this,"Ошибка", "Вами выбран неверный режим ENUM");
+    }
 
 }
 
-void QNixieNumber::testSegment()
+void QNixieNumber::setSegment(int value)
 {
-    int n = 2;
-
-    QRect rect;
-
-    rect.setHeight(height_);
-    rect.setWidth(width_ * n);
-
-    QPaintEvent pevent(rect);
-
-    paintEvent(&pevent);
-
+    segment_ = value;
 }
 
-void QNixieNumber::paintEvent(QPaintEvent *paintevent)
+void QNixieNumber::paintEvent(QPaintEvent *)
 {
-
-    Q_UNUSED(paintevent);
 
     QPainter paint(this);
 
-    time = time.currentTime();
-    time = time.addSecs(1);
+    //time = time.currentTime();
     // Splitting value
-    int s1 = time.second() % 10;
-    int s2 = (time.second() - s1) / 10;
+    //int s1 = time.second() % 10;
+    //int s2 = (time.second() - s1) / 10;
 
-    paint.drawPixmap(0,0,NixieNumber[s2]);
-    paint.drawPixmap(width_,0,NixieNumber[s1]);
+    //paint.drawPixmap(0,0,NixieNumber[0]);
+    //paint.drawPixmap(width_,0,NixieNumber[s1]);
+
+    for(int i = 0; i < dig_; i++)
+    {
+        paint.drawPixmap(width_ * i,0, NixieNumber[i]);
+    }
+}
+
+int QNixieNumber::digits(int number)
+{
+    return (number==0? 1: int (log10 (number) + 1));
+}
+
+int QNixieNumber::split(int number)
+{
+    int n = number % 10;            // получение последней цифры из числа
+    number_ = (number - n) / 10;    // обновление числа, для дальнейшего действий с ним
+    return n;                       // возврат отсеченной части
 }
 
 QNixieNumber::~QNixieNumber() {}

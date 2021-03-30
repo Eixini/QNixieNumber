@@ -7,8 +7,11 @@
 #include <QHBoxLayout>
 #include <QTimer>
 #include <QTime>
+#include <QMessageBox>
+#include <cmath>
 
 #include <array>
+#include <vector>
 #include <QDebug>
 #include <QString>
 #include <QPainter>
@@ -19,17 +22,17 @@ class QNixieNumber : public QWidget
 {
     Q_OBJECT
 
-    static int value_; //
-
 public:
     QNixieNumber(QWidget *parent = nullptr);
     ~QNixieNumber();
 
+    enum{FIXED,CHANGED}; // Для выбора режима - виджет с фиксированным числом сегментов или число сегментов зависит от значности переданного значения
+
 public slots:
 
 int intValue() const; // Returns the current integer value
-void display(int num); // Display nixie numbers
-void setSegment(int val); // Sets the number of segments
+void display(int number = 0); // Display nixie numbers
+void setSegment(int value = 0); // Sets the number of segments
 
 private:
 
@@ -48,25 +51,25 @@ std::array<QPixmap,10> NixieNumber
         QPixmap(":/numbers/nixie_numbers/n9.png")
 };
 
-
-    QHBoxLayout hbox;
-
     // For Debuging
     QLabel displayNum;
     QTimer timer;
     QTime time;
 
-    std::array<QPixmap,2> number;
+    int segment_; // Для хранения количества сегментов
+    int value_; // Для хранения текущего значения на дисплее
+    int number_; // Для хранения полученного значения в display
+    int width_; // Длина 1 изображения
+    int height_; // Высота 1 изображения
+    int dig_; // Хренение количества знаков в цифре
 
-    int width_;
-    int height_;
+    std::vector<int> number; // Для хранение цифр по отдельности из полученного числа
 
 private slots:
 
-void test(); // for debuging
-void testSegment(); // for debuging
-
-void paintEvent(QPaintEvent *paintevent) override; // Переопределенный метод
+void paintEvent(QPaintEvent *) override; // Переопределенный метод
+int digits(int number); // Для подсчета количество знаков в цифре
+int split(int number); // Для дробления числа
 
 };
 #endif // QNIXIENUMBER_H
