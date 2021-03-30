@@ -8,7 +8,7 @@ int main(int argc, char *argv[])
 
     QNixieNumber window;
     window.setWindowTitle("Nixie Numbers");
-    window.setFixedSize(200,100);
+    window.setFixedHeight(100);
 
     window.show();
     return app.exec();
