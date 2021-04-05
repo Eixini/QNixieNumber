@@ -4,35 +4,32 @@
 #include <QWidget>
 #include <QPixmap>
 #include <QTimer>
-#include <QMessageBox>
-#include <cmath>
 #include <vector>
 #include <array>
-#include <QDebug>
-#include <QString>
 #include <QPainter>
 #include <QPaintEvent>
-#include <QRect>
 
 class QNixieNumber : public QWidget
 {
     Q_OBJECT
 
-    enum mode {NIXIE,REALNIXIE}; // Для выбора стиля отображения цифр
-
 public:
-    QNixieNumber(QWidget *parent = nullptr);
+
+    enum mode_ {NIXIE,REALNIXIE}; // Constant values for choosing a style
+
+    QNixieNumber(QWidget *parent = nullptr, mode_ = NIXIE);
     ~QNixieNumber();
 
 public slots:
 
-int intValue() const; // Returns the current integer value
-void display(int number = 0); // Display nixie numbers
-void setSegment(int value = 0); // Sets the number of segments
+int intValue() const;               // Returns the current integer value
+void display(int number = 0);       // Display nixie numbers
+void setSegment(int value = 0);     // Sets the number of segments
+void setStyle(mode_ mode);          // Setting the style of displayed digits
 
 private:
 
-
+    mode_ selectMode_;              // To store the selected style
 
 // For easy access to values
 std::array<QPixmap,10> NixieNumber
@@ -63,20 +60,18 @@ std::array<QPixmap,10> RealNixieNumber
         QPixmap(":/numbers/realnixie_numbers/rn9.png")
 };
 
-    QTimer timer;
+    int segment_;                   // To store the number of installed segments
+    int value_;                     // For the value currently shown on the display
+    int number_;                    // To store the received value from display()
+    int width_;                     // To store the length of one segment
+    int height_;                    // For storing the height of one segment
 
-    int segment_; // Для хранения количества сегментов
-    int value_; // Для хранения текущего значения на дисплее
-    int number_; // Для хранения полученного значения в display
-    int width_; // Длина 1 изображения
-    int height_; // Высота 1 изображения
-
-    std::vector<int> number; // Для хранение цифр по отдельности из полученного числа
+    std::vector<int> number;        // For storing already split values
 
 private slots:
 
-void paintEvent(QPaintEvent *) override; // Переопределенный метод
-int split(int number); // Для дробления числа
+void paintEvent(QPaintEvent *) override;        // Overridden method
+int split(int number);                          // Splitting the resulting number
 
 };
 #endif // QNIXIENUMBER_H
