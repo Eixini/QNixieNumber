@@ -29,14 +29,12 @@ find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 
 if(ANDROID)
   add_library(QNixieNumber SHARED
-    main.cpp
     qnixienumber.cpp
     qnixienumber.h
     qnixienumber_resource.qrc
   )
 else()
   add_executable(QNixieNumber
-    main.cpp
     qnixienumber.cpp
     qnixienumber.h
     qnixienumber_resource.qrc
