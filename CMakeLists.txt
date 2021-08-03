@@ -27,18 +27,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
 
-if(ANDROID)
-  add_library(QNixieNumber SHARED
-    qnixienumber.cpp
-    qnixienumber.h
-    qnixienumber_resource.qrc
-  )
-else()
-  add_executable(QNixieNumber
-    qnixienumber.cpp
-    qnixienumber.h
-    qnixienumber_resource.qrc
-  )
-endif()
+add_library(QNixieNumber SHARED
+  qnixienumber.cpp
+  qnixienumber.h
+  qnixienumber_resource.qrc
+)
 
 target_link_libraries(QNixieNumber PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
