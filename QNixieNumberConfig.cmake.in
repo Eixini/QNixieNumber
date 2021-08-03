@@ -1,0 +1,9 @@
+include(CMakeFindDependencyMacro)
+# find package dependencies (As QNixieNumber depends on Qt5/Qt6)
+find_dependency(QT NAMES Qt6 Qt5 COMPONENTS Widgets REQUIRED)
+find_dependency(Qt${QT_VERSION_MAJOR} COMPONENTS Widgets REQUIRED)
+
+@PACKAGE_INIT@
+
+include(${CMAKE_CURRENT_LIST_DIR}/QNixieNumberTargets.cmake)
+

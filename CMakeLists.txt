@@ -33,4 +33,25 @@ add_library(QNixieNumber SHARED
   qnixienumber_resource.qrc
 )
 
-target_link_libraries(QNixieNumber PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
+
+include(CMakePackageConfigHelpers)
+include(GNUInstallDirs)
+
+# Add INTERFACE include_directories path for INSTALL only, as we use headers relative to current dir
+target_include_directories(QNixieNumber INTERFACE $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+target_link_libraries(QNixieNumber PUBLIC Qt${QT_VERSION_MAJOR}::Widgets)
+
+# create a config package with additional dependencies logic..
+configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/QNixieNumberConfig.cmake.in
+  "${CMAKE_CURRENT_BINARY_DIR}/QNixieNumberConfig.cmake"
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/QNixieNumber.cmake
+)
+# ... and install it (it also includes all exported targets)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QNixieNumberConfig.cmake DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/QNixieNumber)
+
+# Install the main QNixieNumber target...
+install(TARGETS QNixieNumber EXPORT QNixieNumberTargets)
+install(EXPORT QNixieNumberTargets DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/QNixieNumber NAMESPACE QNixieNumber::)
+
+# Install QNixieNumber's public header qnixienumber.h into includedir/qnixienumber/...
+install(FILES qnixienumber.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/qnixienumber/)
